@@ -30,7 +30,7 @@
         (and
             (captured-image img wp5)
             (performed-scan scan wp3)
-            (collected_sample smp wp1)
+            (collected-sample smp wp1)
             (not (memory-full u))
             (not (uuv-full u))
         )

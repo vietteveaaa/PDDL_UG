@@ -44,8 +44,8 @@
             (performed-scan scanwp4 wp4)
             (captured-image imgwp2 wp2)
             (performed-scan scanwp6 wp6)
-            (collected_sample smpwp5 wp5)
-            (collected_sample smpwp1 wp1)
+            (collected-sample smpwp5 wp5)
+            (collected-sample smpwp1 wp1)
             
             (not (memory-full u1))
             (not (memory-full u2))

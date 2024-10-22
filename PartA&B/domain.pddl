@@ -23,10 +23,13 @@
     ; -------------------------------
 
     (:predicates
+        ; UUV status 
         (at-ship ?u - uuv ?s - ship)
         (deployed ?u - uuv)
         (at ?u - uuv ?loc - location)
+        ; Are locations connected?
         (connected ?loc1 - location ?loc2 - location)
+        ; Data management
         (captured-image ?img - image ?loc - location)
         (performed-scan ?scan - sonar-scan ?loc - location)
         (has-image ?u - uuv ?img - image)
@@ -34,7 +37,8 @@
         (memory-full ?u - uuv)
         (sent-image ?u - uuv ?img - image ?s - ship)
         (sent-scan ?u - uuv ?scan - sonar-scan ?s - ship)
-        (collected_sample ?smp - sample ?loc - location)
+        ; Sample management
+        (collected-sample ?smp - sample ?loc - location)
         (has-sample ?u - uuv ?smp - sample)
         (uuv-full ?u)
         (stored-sample ?u - uuv ?smp - sample ?s - ship)
@@ -49,6 +53,7 @@
     ; Actions
     ; -------------------------------
 
+    ; Deployment of UUV. UUV becomes deployed, lives a ship and gets to an underwhater location.
     (:action deploy-uuv
         :parameters (?u - uuv ?s - ship ?loc - location)
         :precondition (and
@@ -63,6 +68,7 @@
         )
     )
 
+    ; Move UUV from one underwater waypoint to another one connected to the first one.
     (:action move-uuv
         :parameters (?u - uuv ?loc1 - location ?loc2 - location)
         :precondition (and 
@@ -76,6 +82,8 @@
         )
     )
 
+    ; UUV returns to the ship
+    ; Note: the UUV stays 'deployed', as otherwise it will be able to leave the ship again, which is prohibited.
     (:action return-to-ship
         :parameters (?u - uuv ?loc - location ?s - ship)
         :precondition (and
@@ -88,7 +96,10 @@
         )
     )
     
-    
+    ; Capture an image.
+    ; 'captured-image' is a permanent state and indicates that an image was once captured at a given location.
+    ; 'has-image' indicates that the UUV now stores an image.
+    ; Memory of the UUV becomes full until it saves the image on a ship.
     (:action capture-image
         :parameters (?u - uuv ?img - image ?loc - location)
         :precondition (and 
@@ -102,6 +113,10 @@
         )
     )
 
+    ; Perform a scan.
+    ; 'performed-scan' is a permanent state and indicates that a scan was once performed at a given location.
+    ; 'has-scan' indicates that the UUV now stores a scan.
+    ; Memory of the UUV becomes full until it saves the scan on a ship.
     (:action perform-scan
         :parameters (?u - uuv ?scan - sonar-scan ?loc - location)
         :precondition (and 
@@ -115,6 +130,7 @@
         )
     )
 
+    ; Save an image on a ship.
     (:action send-image
         :parameters (?u - uuv ?img - image ?s - ship)
         :precondition (and 
@@ -128,6 +144,7 @@
         )
     )
 
+    ; Save a scan on a ship
     (:action send-scan
         :parameters (?u - uuv ?scan - sonar-scan ?s - ship)
         :precondition (and 
@@ -141,6 +158,10 @@
         )
     )
 
+    ; Collect a sample.
+    ; 'collected-sample' is a permanent state and indicates that a sample was once collected at a given location.
+    ; 'has-sample' indicates that the UUV now stores a sample.
+    ; Storage of the UUV becomes full until it leaves the sample on a ship.
     (:action collect-sample
         :parameters (?u - uuv ?smp - sample ?loc - location)
         :precondition (and 
@@ -148,12 +169,13 @@
             (not (uuv-full ?u))
         )
         :effect (and
-            (collected_sample ?smp ?loc)
+            (collected-sample ?smp ?loc)
             (has-sample ?u ?smp)
             (uuv-full ?u)
         )
     )
 
+    ; Store a sample on a ship upon returning
     (:action store-sample
         :parameters (?u - uuv ?smp - sample ?s - ship)
         :precondition (and 

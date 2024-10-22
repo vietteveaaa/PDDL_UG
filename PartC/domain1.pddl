@@ -37,7 +37,7 @@
         (memory-full ?u - uuv)
         (sent-image ?u - uuv ?img - image ?s - ship)
         (sent-scan ?u - uuv ?scan - sonar-scan ?s - ship)
-        (collected_sample ?smp - sample ?loc - location)
+        (collected-sample ?smp - sample ?loc - location)
         (has-sample ?u - uuv ?smp - sample)
         (uuv-full ?u)
         (stored-sample ?u - uuv ?smp - sample ?s - ship)
@@ -177,7 +177,7 @@
             (not (uuv-full ?u))
         )
         :effect (and
-            (collected_sample ?smp ?loc)
+            (collected-sample ?smp ?loc)
             (has-sample ?u ?smp)
             (uuv-full ?u)
         )
