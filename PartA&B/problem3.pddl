@@ -11,6 +11,7 @@
     )
 
     (:init
+        ; State connections between waypoints
         (connected wp1 wp2)
         (connected wp2 wp1)
         (connected wp2 wp3)
@@ -21,6 +22,7 @@
         (connected wp5 wp6)
         (connected wp6 wp4)
 
+        ; State UUV status
         (deployed u1)
         (at u1 wp2)
         (not (at-ship u1 s1))
@@ -29,9 +31,11 @@
         (at-ship u2 s2)
         (not (at-ship u2 s1))
 
+        ; State a ship storage status
         (not (ship-full s1))
         (not (ship-full s2))
 
+        ; State UUV storage status
         (not (memory-full u1))
         (not (has-sample u1))
         (not (memory-full u2))
@@ -40,6 +44,7 @@
 
     (:goal
         (and
+            ; Data and samples managed similarly to problem 1
             (captured-image imgwp3 wp3)
             (performed-scan scanwp4 wp4)
             (captured-image imgwp2 wp2)
