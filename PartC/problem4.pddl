@@ -8,11 +8,15 @@
         smpwp5 smpwp1 - sample
         imgwp3 imgwp2 - image
         scanwp4 scanwp6 - sonar-scan
+
+        e1 e2 - engineer ; NEW
     )
 
     (:init
-        (engineer-at-control-centre) ; NEW
-        (not (engineer-at-bay)) ; NEW
+        (engineer-at-control-centre e1 s1) ; NEW
+        (not (engineer-at-bay e1 s1)) ; NEW
+        (engineer-at-control-centre e2 s2) ; NEW
+        (not (engineer-at-bay e2 s2)) ; NEW
 
         (connected wp1 wp2)
         (connected wp2 wp1)

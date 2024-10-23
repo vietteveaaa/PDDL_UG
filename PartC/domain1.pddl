@@ -16,6 +16,8 @@
         sample
         image
         sonar-scan
+
+        engineer ; NEW
     )
 
     ; -------------------------------
@@ -23,8 +25,8 @@
     ; -------------------------------
 
     (:predicates
-        (engineer-at-control-centre) ; NEW
-        (engineer-at-bay) ; NEW
+        (engineer-at-control-centre ?e ?s) ; NEW
+        (engineer-at-bay ?e ?s) ; NEW
 
         (at-ship ?u - uuv ?s - ship)
         (deployed ?u - uuv)
@@ -49,35 +51,35 @@
     ; -------------------------------
 
     (:action walk-to-bay ; NEW
-        :parameters ()
-        :precondition (and
-            (engineer-at-control-centre)
-            (not (engineer-at-bay))
+        :parameters (?e - engineer ?s - ship)
+        :precondition (and ; the engineer's at the control centre and not at the bay
+            (engineer-at-control-centre ?e ?s)
+            (not (engineer-at-bay ?e ?s))
         )
-        :effect (and
-            (not (engineer-at-control-centre))
-            (engineer-at-bay)
+        :effect (and ; the engineer's at the bay and not at the control centre
+            (not (engineer-at-control-centre ?e ?s))
+            (engineer-at-bay ?e ?s)
         )
     )
 
     (:action walk-to-control-centre ; NEW
         :parameters ()
-        :precondition (and
-            (not (engineer-at-control-centre))
-            (engineer-at-bay)
+        :precondition (and ; the engineer's at the bay and not at the control centre
+            (not (engineer-at-control-centre ?e ?s))
+            (engineer-at-bay ?e ?s)
         )
-        :effect (and
-            (engineer-at-control-centre)
-            (not (engineer-at-bay))
+        :effect (and ; the engineer's at the control centre and not at the bay
+            (engineer-at-control-centre ?e ?s)
+            (not (engineer-at-bay ?e ?s))
         )
     )
 
 
 
     (:action deploy-uuv
-        :parameters (?u - uuv ?s - ship ?loc - location)
+        :parameters (?e - engineer ?u - uuv ?s - ship ?loc - location)
         :precondition (and
-            (engineer-at-bay) ; NEW
+            (engineer-at-bay  ?e ?s) ; NEW
             (not (deployed ?u))
             (at-ship ?u ?s)
             (not (at ?u ?loc))
@@ -103,9 +105,9 @@
     )
 
     (:action return-to-ship
-        :parameters (?u - uuv ?loc - location ?s - ship)
+        :parameters (?e - engineer ?u - uuv ?loc - location ?s - ship)
         :precondition (and
-            (engineer-at-bay) ; NEW
+            (engineer-at-bay ?e ?s) ; NEW
             (at ?u ?loc)
             (not (at-ship ?u ?s))
         )
@@ -143,9 +145,9 @@
     )
 
     (:action send-image
-        :parameters (?u - uuv ?img - image ?s - ship)
+        :parameters (?e - engineer ?u - uuv ?img - image ?s - ship)
         :precondition (and 
-            (engineer-at-control-centre) ; NEW
+            (engineer-at-control-centre ?e ?s) ; NEW
             (has-image ?u ?img)
             (memory-full ?u)
         )
@@ -157,9 +159,9 @@
     )
 
     (:action send-scan
-        :parameters (?u - uuv ?scan - sonar-scan ?s - ship)
+        :parameters (?e - engineer ?u - uuv ?scan - sonar-scan ?s - ship)
         :precondition (and
-            (engineer-at-control-centre) ; NEW
+            (engineer-at-control-centre ?e ?s) ; NEW
             (has-scan ?u ?scan)
             (memory-full ?u)
         )

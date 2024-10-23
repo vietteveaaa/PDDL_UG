@@ -2,15 +2,16 @@
     (:domain windfarm)
 
     (:objects
-        u - uuv
-        s - ship
-        wp1 wp2 wp3 wp4 - location
-        img - image
-        scan - sonar-scan
+        u - uuv ; the UUV
+        s - ship ; the ship
+        wp1 wp2 wp3 wp4 - location ; the 4 waypoints
+        img - image ; the image that's going to be taken at wp3
+        scan - sonar-scan ; the scan that's going to be taken at wp4
     )
 
     (:init
         ; State connections between waypoints
+        ; If waypoints are connected both ways, both connections are added. Otherwise only one is
         (connected wp1 wp2)
         (connected wp2 wp1)
         (connected wp2 wp3)
@@ -19,8 +20,8 @@
         (connected wp4 wp1)
 
         ; State UUV status
-        (not (deployed u))
-        (at-ship u s)
+        (not (deployed u)) ; the UUV can be deployed
+        (at-ship u s) ; the UUV is at the ship
 
         ; State UUV storage status
         (not (memory-full u))
